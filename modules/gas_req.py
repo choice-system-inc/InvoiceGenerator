@@ -28,17 +28,21 @@ def requests_to_gas(url, data):
                 # 重複確認
                 for i in range(1000):
                     counter = i + 1
-                    if os.path.exists("./pdf-downloads/" + data["company"] + "_" + dt_str + "_" + str(counter) + ".pdf"):
+                    if os.path.exists("./pdf-downloads/" + "invoice_" + dt_str + "_" + str(counter) + ".pdf"):
                         pass
                     else:
-                        file_name = "./pdf-downloads/" + data["company"] + "_" + dt_str + "_" + str(counter) + ".pdf"
+                        file_name = "./pdf-downloads/" + "invoice_" + dt_str + "_" + str(counter) + ".pdf"
                         break
                 with open(file_name, "wb") as pdf_file:
                     pdf_file.write(pdf_response.content)
                 print("PDFファイルがダウンロードされました。")
+                return "Complete", "invoice_" + dt_str + "_" + str(counter) + ".pdf"
             else:
                 print("PDFファイルのダウンロードに失敗しました。")
+                return "Failed to download pdf file", ""
         else:
             print("レスポンスにpdf_file_urlが含まれていません。")
+            return "Non exist pdf_file_url in response", ""
     else:
         print("リクエスト失敗:", response.status_code)
+        return response.status_code, ""
