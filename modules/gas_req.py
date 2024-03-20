@@ -1,5 +1,7 @@
 import requests
 import json
+from datetime import datetime
+import os
 
 def requests_to_gas(url, data):
     # リクエストヘッダー
@@ -21,7 +23,17 @@ def requests_to_gas(url, data):
             pdf_response = requests.get(pdf_file_url)
             if pdf_response.status_code == 200:
                 # PDFファイルの保存
-                with open("./pdf-downloads/downloaded_invoice.pdf", "wb") as pdf_file:
+                dt_now = datetime.now()
+                dt_str = dt_now.strftime('%Y%m%d')
+                # 重複確認
+                for i in range(1000):
+                    counter = i + 1
+                    if os.path.exists("./pdf-downloads/" + data["company"] + "_" + dt_str + "_" + str(counter) + ".pdf"):
+                        pass
+                    else:
+                        file_name = "./pdf-downloads/" + data["company"] + "_" + dt_str + "_" + str(counter) + ".pdf"
+                        break
+                with open(file_name, "wb") as pdf_file:
                     pdf_file.write(pdf_response.content)
                 print("PDFファイルがダウンロードされました。")
             else:
