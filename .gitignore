@@ -1,2 +1,3 @@
 pdf-downloads/*.pdf
 setting/*.*
+!setting/.gitkeep
