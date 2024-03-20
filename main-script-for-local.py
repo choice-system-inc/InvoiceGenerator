@@ -11,7 +11,7 @@ if __name__ == "__main__":
         custom_code = sys.argv[2]
     else:
         custom_code = 0
-    url = read_setting()
+    url, user_id, user_pass = read_setting()
     send_json_data = read_template_by_id(template_id, custom_code)
     res = requests_to_gas(url, send_json_data)
     print(res)

@@ -6,8 +6,9 @@ from modules.gas_req import requests_to_gas
 app = Flask(__name__, static_folder="./pdf-downloads")
 app.secret_key = 'your_secret_key'  # Flashメッセージ用の秘密鍵
 auth = HTTPBasicAuth()
+url, user_id, password = read_setting()
 USER_DATA = {
-    "fuzimaru0421": "naoki0421"
+    user_id: password
 }
 
 @auth.verify_password
@@ -35,7 +36,7 @@ def send_data():
     if not template_id:
         flash('*Template IDは必須です。', 'error')
         return redirect(url_for('form'))
-    url = read_setting()
+    url, user_id, password = read_setting()
     send_json_data = read_template_by_id(template_id, custom_code)
     response, file_name = requests_to_gas(url, send_json_data)
     download_url = url_for('static', filename=file_name)
